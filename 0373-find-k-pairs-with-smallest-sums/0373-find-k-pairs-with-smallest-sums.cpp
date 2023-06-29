@@ -1,19 +1,25 @@
 class Solution {
 public:
-    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
-        priority_queue<pair<int,pair<int,int>>, vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>>> pq;
-        int n = nums1.size(), m = nums2.size();
+    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) { // time complexity is O(m*nlogk), m = nums1 size, n = nums2 size
+        priority_queue<pair<int,pair<int,int>>> pq;  // default: the greatest comes top
+        for(int i=0;i<nums1.size();i++) {
+            for(int j=0;j<nums2.size();j++) {
+                int sum=nums1[i]+nums2[j];
+                if (pq.size()<k) {
+                    pq.push({sum,{nums1[i],nums2[j]}});
+                }
+                else if (sum<pq.top().first) {
+                    pq.pop();
+                    pq.push({sum,{nums1[i],nums2[j]}});
+                } else {
+                    break;  // save time! since we don't need to traverse the rest of vector 2
+                }
+            }
+        }
         vector<vector<int>> ans;
-        for(int i = 0; i < n; i++)
-            pq.push({nums1[i]+nums2[0],{i,0}});
-        while(!pq.empty() && k--)
-        {
-            pair<int,pair<int,int>> tp = pq.top();
-            int x = tp.second.first, y = tp.second.second;
+        while(!pq.empty()) {
+            ans.push_back({pq.top().second.first, pq.top().second.second});
             pq.pop();
-            ans.push_back({nums1[x], nums2[y]});
-            if(y != m-1)
-                pq.push({nums1[x]+nums2[y+1],{x, y+1}});
         }
         return ans;
     }
