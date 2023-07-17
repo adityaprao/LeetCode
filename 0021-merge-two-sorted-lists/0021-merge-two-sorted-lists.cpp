@@ -12,9 +12,7 @@ class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) 
     {
-        ListNode* dummy, *cur;
-        dummy = new ListNode(0);
-        cur = dummy;
+        ListNode* dummy = new ListNode(0), *cur = dummy;
         
         while (l1 and l2)
         {
